@@ -1,8 +1,23 @@
-const NewTodo = () => {
+import React, { useRef } from "react";
+
+const NewTodo: React.FC<{ onAddTodo: (text: string) => void }> = (props) => {
+  const todoTextInputRef = useRef<HTMLInputElement>(null);
+
+  const submitHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    const enteredText = todoTextInputRef.current!.value;
+
+    if (enteredText.trim().length === 0) {
+      throw new Error("Text should not be empty!");
+    }
+
+    props.onAddTodo(enteredText);
+  }
+
   return (
-    <form>
+    <form onSubmit={submitHandler}>
       <label htmlFor="textInput">Todo Text</label>
-      <input type="text" id="textInput"></input>
+      <input type="text" id="textInput" ref={todoTextInputRef} />
       <button>Add Todo</button>
     </form>
   );
